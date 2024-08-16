@@ -25,7 +25,7 @@
         /* .itemのwidth x 個数 + .v_varのwidth x 個数 */
         width: calc(150px * 7 + 3px * 6);
         height: 120px;
-        margin: 300px auto;
+        margin: 300px auto 0 auto;
         text-align: center;
         border-radius: 999999px;
     }
@@ -62,8 +62,20 @@
         /*background: #525252;*/
         background: #525252;
     }
-    .hand_icon{
-        fill: #000;
+
+    /* カウント用テーブル */
+    #table_area{
+        margin: 50px auto 0 auto;
+        width: 200px;
+        color: #FFFFFF;
+    }
+    #table_area tr,
+    #table_area td{
+        border: 1px solid #FFFFFF;
+    }
+    #count_table img{
+        width: 24px;
+        height: 24px;
     }
     </style>
 </head>
@@ -71,47 +83,85 @@
     <main>
         <div class="panel_wrap">
             <div class="panel">
-                <div class="item item_left">
-                    <img class="hand_icon" src="MingCute-main/png/thumb_up_line.png">
+                <div class="item item_left" id="item_1">
+                    <img class="hand_icon" src="MingCute-main/png/thumb_up_line.png" id="img_item_1">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item">
-                    <img class="hand_icon" src="MingCute-main/png/finger_rock_line.png">
+                <div class="item" id="item_2">
+                    <img class="hand_icon" src="MingCute-main/png/finger_rock_line.png" id="img_item_2">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item">
-                    <img class="hand_icon" src="MingCute-main/png/middle_finger_line.png">
+                <div class="item" id="item_3">
+                    <img class="hand_icon" src="MingCute-main/png/middle_finger_line.png" id="img_item_3">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item">
-                    <img class="hand_icon" src="MingCute-main/png/hand_line.png">
+                <div class="item" id="item_4">
+                    <img class="hand_icon" src="MingCute-main/png/hand_line.png" id="img_item_4">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item">
-                    <img class="hand_icon" src="MingCute-main/png/hand_two_fingers_line.png">
+                <div class="item" id="item_5">
+                    <img class="hand_icon" src="MingCute-main/png/hand_two_fingers_line.png" id="img_item_5">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item">
-                    <img class="hand_icon" src="MingCute-main/png/hand_finger_2_line.png">
+                <div class="item" id="item_6">
+                    <img class="hand_icon" src="MingCute-main/png/hand_finger_2_line.png" id="img_item_6">
                 </div>
                 <div class="v_bar_wrap">
                     <div class="v_bar"></div>
                 </div>
-                <div class="item item_right">
-                    <img class="hand_icon" src="MingCute-main/png/thumb_down_line.png">
+                <div class="item item_right" id="item_7">
+                    <img class="hand_icon" src="MingCute-main/png/thumb_down_line.png" id="img_item_7">
                 </div>
             </div>
         </div>
+        <div id="table_area">
+            <table id="count_table"> 
+            </table>
+        </div>
     </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        let count = {};
+        $(function(){
+            for(let i=0; i<$('.item').length; i++){
+                count[$('.item').eq(i).attr('id')] = 0;
+            }
+            table_update();
+        });
+
+        $('.item').on('click', function(){
+            let item_id = $(this).attr('id');
+            count[item_id]++;
+            console.log(count);
+            table_update();
+        });
+
+        function table_update(){
+            // アイコン取得＆テーブルに表示
+            let table_html = '';
+            for(let i=0; i<$('.item').length; i++){
+                let temp_src = $('.item img').eq(i).attr('src');
+                table_html += '<tr>';
+                table_html += '<td style="width: 50px; text-align: center;">';
+                table_html += '<img src="' + temp_src + '">';
+                table_html += '</td>';
+                table_html += '<td style="width: 50px; text-align: center;">';
+                table_html += count[$('.item').eq(i).attr('id')];
+                table_html += '</td>';
+                table_html += '</tr>';
+            }
+            $('#count_table').html(table_html);
+        }
+    </script>
 </body>
 </html>
