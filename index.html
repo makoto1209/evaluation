@@ -67,16 +67,43 @@
     /* カウント用テーブル */
     #table_area{
         margin: 50px auto 0 auto;
-        width: 200px;
+        width: 105px;
+        height: 300px;
         color: #FFFFFF;
     }
     #table_area tr,
     #table_area td{
         border: 1px solid #FFFFFF;
     }
+    #table_area td{
+        width: 50px;
+        text-align: center;
+    }
     #count_table img{
         width: 24px;
         height: 24px;
+    }
+
+    /* リセットボタン */
+    #reset_btn{
+        display: block;
+        text-align: center;
+        vertical-align: middle;
+        text-decoration: none;
+        width: 120px;
+        margin: auto;
+        padding: 1rem 0rem;
+        font-weight: bold;
+        border: 2px solid #27acd9;
+        color: #27acd9;
+        border-radius: 100vh;
+        transition: 0.5s;
+        font-size: 18px;
+    }
+    #reset_btn:hover{
+        color: #fff;
+        background: #27acd9;
+        cursor: pointer;
     }
     </style>
 </head>
@@ -129,21 +156,42 @@
             <table id="count_table"> 
             </table>
         </div>
+        <input type="button" id="reset_btn" class="btn_03" value="Reset">
     </main>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
+        let ls_item_name = 'evaluation_count';
         let count = {};
+        
+        
         $(function(){
-            for(let i=0; i<$('.item').length; i++){
-                count[$('.item').eq(i).attr('id')] = 0;
+            // localStorage 取得
+            if(localStorage.hasOwnProperty(ls_item_name)) {
+                count = JSON.parse(localStorage.getItem(ls_item_name));
+            }else{
+                for(let i=0; i<$('.item').length; i++){
+                    count[$('.item').eq(i).attr('id')] = 0;
+                }
             }
+
+            
             table_update();
         });
 
         $('.item').on('click', function(){
             let item_id = $(this).attr('id');
             count[item_id]++;
-            console.log(count);
+            localStorage.setItem(ls_item_name, JSON.stringify(count));
+            
+            table_update();
+        });
+
+        $('#reset_btn').on('click', function(){
+            for(let key in count){
+                count[key] = 0;
+            }
+            localStorage.setItem(ls_item_name, JSON.stringify(count));
+
             table_update();
         });
 
@@ -153,10 +201,10 @@
             for(let i=0; i<$('.item').length; i++){
                 let temp_src = $('.item img').eq(i).attr('src');
                 table_html += '<tr>';
-                table_html += '<td style="width: 50px; text-align: center;">';
+                table_html += '<td>';
                 table_html += '<img src="' + temp_src + '">';
                 table_html += '</td>';
-                table_html += '<td style="width: 50px; text-align: center;">';
+                table_html += '<td>';
                 table_html += count[$('.item').eq(i).attr('id')];
                 table_html += '</td>';
                 table_html += '</tr>';
